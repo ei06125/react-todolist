@@ -120,13 +120,12 @@ export const deleteTask = async (req, res) => {
 
         // Update Project
         const selfProject = await Project.findOne({ _id: mongoose.Types.ObjectId(projectId) });
-        const newTasks = selfProject.tasks.filter((t) => t !== task._id);
+        const newTasks = selfProject.tasks.filter((taskID) => taskID !== task._id);
         Project.findOneAndUpdate({ _id: projectId }, { tasks: selfProject.tasks }, { new: true }, (err) => {
             if (err) {
                 res.status(500).send(err);
             }
         });
-
 
         res.status(200).json({ message: 'Successfully deleted task' });
     });

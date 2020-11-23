@@ -3,6 +3,10 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { UserSchema } from '../models/userModel';
 
+// bcrypt
+const SALT_WORK_FACTOR = 10;
+
+
 const User = mongoose.model('User', UserSchema);
 
 export const loginRequired = (req, res, next) => {
@@ -14,8 +18,13 @@ export const loginRequired = (req, res, next) => {
 }
 
 export const register = (req, res) => {
+    console.log('register');
+    console.log(req.body);
+    console.log(req.body.username);
+    console.log(req.body.email);
+    console.log(req.body.password);
     const newUser = new User(req.body);
-    newUser.hashPassword = bcrypt.hashSync(req.body.password, 10);
+    newUser.hashPassword = bcrypt.hashSync(req.body.password, SALT_WORK_FACTOR);
     newUser.save((err, user) => {
         if (err) {
             return res.status(400).send({
@@ -23,12 +32,13 @@ export const register = (req, res) => {
             });
         } else {
             user.hashPassword = undefined;
-            return res.json(user); 
+            return res.status(200).json(user); 
         }
-    })
+    });
 }
 
 export const login = (req,res) => {
+    console.log('login');
     User.findOne({
         email: req.body.email
     }, (err, user) => {

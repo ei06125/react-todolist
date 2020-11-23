@@ -44,12 +44,12 @@ const routes = (app) => {
         .put(updateTask)
         .delete(deleteTask);
 
-    // // Authentication & Registration
-    // app.route('/auth/register')
-    //     .post(register);
+    // Authentication & Registration
+    app.route('/auth/register')
+        .post(register);
 
-    // app.route('/login')
-    //     .post(login);
+    app.route('/login')
+        .post(login);
 }
 
 export default routes;
